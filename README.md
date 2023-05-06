@@ -16,8 +16,9 @@ and common knowladge of the main tasks that a savings account inails.
 ## Tools and Technologies
 1. For the coding tool, IntelliJ 2023.1 was used.
 2. Versions used: Java 11.0.18, Spring Boot 2.7.11 and Maven 3.8.7
-3 Database: MSSQL 8.0
-4. Postman as a Rest-client for performing endpoint access.
+3. Database: MSSQL 8.0
+4. Git
+5. Postman as a Rest-client for performing endpoint access.
 
 ## Data
 As data storage MYSQL 8 was used, as opposed to static data coded in the application.
