@@ -28,3 +28,9 @@ These files are 'accounts-data.sql and 'transactions-data.sql'. Both found under
 1. Database name: bank_db
 2. User: michael
 3. Password: mysql@123
+
+## Running the application
+1. Get the .jar file found in the /target folder.
+2. Check out the code or download the .zip file and open it in IntelliJ. Right-click the Main app file and choose Run.
+3. Import the downloaded project to Eclipse. See [Export IntelliJ Project To Eclipse]
+(https://www.jetbrains.com/help/idea/exporting-an-intellij-idea-project-to-eclipse.html)
