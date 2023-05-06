@@ -32,4 +32,4 @@ These files are 'accounts-data.sql and 'transactions-data.sql'. Both found under
 ## Running the application
 1. Get the .jar file found in the /target folder.
 2. Check out the code or download the .zip file and open it in IntelliJ. Right-click the Main app file and choose Run.
-3. Import the downloaded project to Eclipse. See [Export IntelliJ Projet to Eclipse]([url](https://www.jetbrains.com/help/idea/exporting-an-intellij-idea-project-to-eclipse.html))
+3. Import the downloaded project to Eclipse. See [Export IntelliJ Projet to Eclipse](https://www.jetbrains.com/help/idea/exporting-an-intellij-idea-project-to-eclipse.html)
