@@ -2,7 +2,9 @@ package com.backend.test.controller;
 
 import com.backend.test.entity.SavingsAccount;
 import com.backend.test.entity.Transaction;
+import com.backend.test.exception.AccountAlreadyExistsException;
 import com.backend.test.exception.AccountNotFoundException;
+import com.backend.test.exception.BalanceExceededException;
 import com.backend.test.service.AccountService;
 import javax.validation.Valid;
 
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -44,10 +47,10 @@ public class AccounSystemtController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
-    // Ex: http://localhost:8080/api/transactions  -> Returns 10 transactions  (GET)
+    // Ex: http://localhost:8080/api/transactions  -> Returns last 10 transactions  (GET)
     @GetMapping("/transactions")
-    public List<Transaction> getTransactionsPage() {
-        return this.accountService.getTenTransactions();
+    public List<Transaction> getTransactionsPageDeacending() {
+        return this.accountService.getLastTenTransactions();
     }
 
     // Ex: http://localhost:8080/api/accounts/balance/1 (GET)
@@ -63,7 +66,7 @@ public class AccounSystemtController {
 
     // Ex: http://localhost:8080/api/accounts (POST)
     @PostMapping("/accounts")
-    public ResponseEntity<SavingsAccount> createSavingsAccount(@Valid @RequestBody SavingsAccount account) {
+    public ResponseEntity<SavingsAccount> createSavingsAccount(@Valid @RequestBody SavingsAccount account) throws AccountAlreadyExistsException {
         SavingsAccount saved = this.accountService.createAccount(account);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -101,15 +104,42 @@ public class AccounSystemtController {
 
     // Ex: http://localhost:8080/api/accounts/2/withdraw/100 (PUT)
     @PutMapping("accounts/{id}/withdraw/{amount}")
-    public SavingsAccount withdraw(@PathVariable("id") Long id, @PathVariable("amount") Double amount) {
+    public ResponseEntity<SavingsAccount> withdraw(@PathVariable("id") Long id, @PathVariable("amount") Double amount) throws BalanceExceededException {
         SavingsAccount updated = this.accountService.withdrawAmount(id, amount);
-        return  updated;
+
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     // Ex: http://localhost:8080/api/accounts/2/deposit/150 (PUT)
     @PutMapping("accounts/{id}/deposit/{amount}")
-    public SavingsAccount deposit(@PathVariable("id") Long id, @PathVariable("amount") Double amount) {
+    public ResponseEntity<SavingsAccount> deposit(@PathVariable("id") Long id, @PathVariable("amount") Double amount) {
         SavingsAccount updated = this.accountService.depositAmount(id, amount);
-        return  updated;
+
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    // Ex: http://localhost:8080/api/accounts/1 (PUT)
+    @PutMapping("accounts/{id}")
+    public ResponseEntity<SavingsAccount> updateAccount(@PathVariable("id") Long id, @RequestBody SavingsAccount account) {
+        SavingsAccount existingAccount = this.accountService.getOneAccount(id);
+
+        if (existingAccount != null) {
+            existingAccount.setBalance(account.getBalance());
+            existingAccount.setAccountNumber(account.getAccountNumber());
+            existingAccount.setFirstName(account.getFirstName());
+            existingAccount.setLastName(existingAccount.getLastName());
+
+            SavingsAccount updatedAccount = this.accountService.updateAccount(existingAccount);
+            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Ex: http://localhost:8080/api/accounts/1 (DELETE)
+    @DeleteMapping("/accounts/{id}")
+    public ResponseEntity<String> deleteSavingsAccount(@PathVariable("id") long accountId){
+        this.accountService.deleteAccount(accountId);
+        return new ResponseEntity<String>(String.format("Savings account with id: %s deleted successfully!.", accountId), HttpStatus.OK);
     }
 }

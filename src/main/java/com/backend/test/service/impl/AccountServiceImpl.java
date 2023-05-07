@@ -2,14 +2,19 @@ package com.backend.test.service.impl;
 
 import com.backend.test.entity.SavingsAccount;
 import com.backend.test.entity.Transaction;
+import com.backend.test.exception.AccountAlreadyExistsException;
+import com.backend.test.exception.AccountNotFoundException;
+import com.backend.test.exception.BalanceExceededException;
 import com.backend.test.repository.SavingsAccountRepository;
 import com.backend.test.repository.TransactionRepository;
 import com.backend.test.service.AccountService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NonUniqueResultException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +37,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Transaction> getTenTransactions() {
-        Pageable pageable = PageRequest.of(0, 10);
+    public List<Transaction> getLastTenTransactions() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("transactionId").descending());
         Page<Transaction> page = this.transactionRepository.findAll(pageable);
 
         return  page.get().collect(Collectors.toList());
@@ -55,9 +60,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public SavingsAccount withdrawAmount(Long id, Double amount) {
+    public SavingsAccount withdrawAmount(Long id, Double amount) throws BalanceExceededException {
         SavingsAccount existing = this.getOneAccount(id);
-        existing.setBalance(existing.getBalance() - amount);
+
+        if (amount > existing.getBalance()) {
+            throw new BalanceExceededException(String.format("Balance amount exceeded: %s", existing.getBalance()));
+        }
+
+        existing.setBalance(Math.floor((existing.getBalance() - amount) * 100) / 100);
         SavingsAccount updated = this.accountRepository.save(existing);
 
         // Create a transaction for the withdrawal
@@ -81,7 +91,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public SavingsAccount createAccount(SavingsAccount newAccount) {
+    public SavingsAccount createAccount(SavingsAccount newAccount) throws AccountAlreadyExistsException {
+        Optional<SavingsAccount> accountOptional = this.accountRepository.findByAccountNumber(newAccount.getAccountNumber());
+        if (accountOptional.isPresent()) {
+            throw new AccountAlreadyExistsException(String.format("An account with number %s exists already", newAccount.getAccountNumber()));
+        }
+
         SavingsAccount saved = this.accountRepository.save(newAccount);
         return saved;
     }
@@ -92,8 +107,14 @@ public class AccountServiceImpl implements AccountService {
         return saved;
     }
 
-    public void updateAccount(SavingsAccount account) {
-        this.accountRepository.save(account);
+    public SavingsAccount updateAccount(SavingsAccount account) {
+        SavingsAccount updatedAccount = this.accountRepository.save(account);
+        return updatedAccount;
+    }
+
+    @Override
+    public void deleteAccount(Long id) {
+        this.accountRepository.deleteById(id);
     }
 
     private Transaction createLocalTransaction(Double amount, SavingsAccount account) {

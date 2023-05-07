@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.NonUniqueResultException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -26,6 +27,20 @@ public class AccountSystemGlobalExceptionHandler extends ResponseEntityException
 
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AccountAlreadyExistsException.class)
+    public final ResponseEntity<ErrorDetails> handleAccountAlreadyExistsException(Exception ex, WebRequest request) throws Exception {
+
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BalanceExceededException.class)
+    public final ResponseEntity<ErrorDetails> handleBalanceExceededException(Exception ex, WebRequest request) throws Exception {
+
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     // Handles Validation errors
