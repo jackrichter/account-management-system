@@ -18,7 +18,7 @@ and common knowladge of the main tasks that a savings account inails.
 2. Versions used: Java 11.0.18, Spring Boot 2.7.11 and Maven 3.8.7
 3. Database: MSSQL 8.0
 4. Git
-5. Postman as a Rest-client for performing endpoint access.
+5. Tailend API Tester Free Edition (Chrome extention) as a Rest-client for performing endpoint access.
 
 ## Data
 As data storage MYSQL 8 was used, as opposed to static data coded in the application.
