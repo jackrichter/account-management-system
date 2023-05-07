@@ -16,8 +16,9 @@ and common knowladge of the main tasks that a savings account inails.
 ## Tools and Technologies
 1. For the coding tool, IntelliJ 2023.1 was used.
 2. Versions used: Java 11.0.18, Spring Boot 2.7.11 and Maven 3.8.7
-3 Database: MSSQL 8.0
-4. Postman as a Rest-client for performing endpoint access.
+3. Database: MSSQL 8.0
+4. Git
+5. Tailend API Tester Free Edition (Chrome extention) as a Rest-client for performing endpoint access.
 
 ## Data
 As data storage MYSQL 8 was used, as opposed to static data coded in the application.
@@ -27,3 +28,8 @@ These files are 'accounts-data.sql and 'transactions-data.sql'. Both found under
 1. Database name: bank_db
 2. User: michael
 3. Password: mysql@123
+
+## Running the application
+1. Get the .jar file found in the /target folder.
+2. Check out the code or download the .zip file and open it in IntelliJ. Right-click the Main app file and choose Run.
+3. Import the downloaded project to Eclipse. See [Export IntelliJ Projet to Eclipse](https://www.jetbrains.com/help/idea/exporting-an-intellij-idea-project-to-eclipse.html)
