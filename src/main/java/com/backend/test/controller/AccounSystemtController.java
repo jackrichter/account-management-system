@@ -6,17 +6,18 @@ import com.backend.test.exception.AccountAlreadyExistsException;
 import com.backend.test.exception.AccountNotFoundException;
 import com.backend.test.exception.BalanceExceededException;
 import com.backend.test.service.AccountService;
-import javax.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * REST API endpoints to serve this application's user.
+ */
 @RestController
 @RequestMapping("/api")
 public class AccounSystemtController {
@@ -38,6 +39,8 @@ public class AccounSystemtController {
     // Ex: http://localhost:8080/api/accounts/1 (GET)
     @GetMapping("/accounts/{id}")
     public ResponseEntity<SavingsAccount> getAccount(@PathVariable("id") Long id) throws AccountNotFoundException {
+
+        // The account must exist
         SavingsAccount account = this.accountService.getOneAccount(id);
 
         if (account == null) {
@@ -56,6 +59,8 @@ public class AccounSystemtController {
     // Ex: http://localhost:8080/api/accounts/balance/1 (GET)
     @GetMapping("/accounts/balance/{id}")
     public ResponseEntity<SavingsAccount> getBalanceById(@PathVariable("id") Long id) throws AccountNotFoundException {
+
+        // The account must exist
         SavingsAccount account = this.accountService.getBalance(id);
 
         if (account == null) {
@@ -67,8 +72,11 @@ public class AccounSystemtController {
     // Ex: http://localhost:8080/api/accounts (POST)
     @PostMapping("/accounts")
     public ResponseEntity<SavingsAccount> createSavingsAccount(@Valid @RequestBody SavingsAccount account) throws AccountAlreadyExistsException {
+
+        // The new account
         SavingsAccount saved = this.accountService.createAccount(account);
 
+        // A location URL to be provided to the user
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(saved.getId())
@@ -80,6 +88,8 @@ public class AccounSystemtController {
     // Ex: http://localhost:8080/api/transactions/2  (POST for account with id = 2)
     @PostMapping("/transactions/{id}")
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction, @PathVariable("id") Long id) throws AccountNotFoundException {
+
+        // An account coupled to this transaction must exist
         SavingsAccount account = this.accountService.getOneAccount(id);
 
         if (account == null) {

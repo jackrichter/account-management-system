@@ -12,6 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.persistence.NonUniqueResultException;
 import java.time.LocalDateTime;
 
+/**
+ * Global, customized exception handling.
+ */
 @ControllerAdvice
 public class AccountSystemGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
