@@ -26,7 +26,7 @@ and common knowladge of the main tasks that a savings account inails.
 3. Validation.
 4. JUnit tests.
 #### Notes
-If you intend to run the JUnit tests locally, make sure to have run the SQL-Script files first.
+If you intend to run the JUnit tests locally, make sure to have run the SQL-Script files first. 
 The account number 999999999 is reserved for the JUnit tests. Do not use it while creating accounts.
 
 ## Data
