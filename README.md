@@ -20,6 +20,15 @@ and common knowladge of the main tasks that a savings account inails.
 4. Git
 5. Tailend API Tester Free Edition (Chrome extention) as a Rest-client for performing endpoint access.
 
+## Features
+1. REST API.
+2. Customized exception handling.
+3. Validation.
+4. JUnit tests.
+### Notes
+If you intend to run the JUnit tests locally, make sure to have run the SQL-Script files first.
+The account number 999999999 is reserved for the JUnit tests. Do not use it while creating accounts.
+
 ## Data
 As data storage MYSQL 8 was used, as opposed to static data coded in the application.
 there are two SQL-script files supplied for setting up the initial state of the two tables: 'savings_accounts' and 'transactions'.
