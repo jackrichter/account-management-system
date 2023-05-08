@@ -11,7 +11,7 @@ and time when only one microservice is involved.
 
 ## Domain
 The choise of domain bounderies has been decided through the task description itself (considered as the business experts)
-and common knowladge of the main tasks that a savings account inails.
+and common knowladge of the main tasks that a savings account intails.
 
 ## Tools and Technologies
 1. For the coding tool, IntelliJ 2023.1 was used.
